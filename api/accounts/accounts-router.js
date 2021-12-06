@@ -1,6 +1,12 @@
 const router = require('express').Router();
 const Account = require('./accounts-model');
 
+const {
+  checkAccountPayload,
+  checkAccountNameUnique,
+  checkAccountId
+} = require('./accounts-middleware')
+
 router.get('/', async (req, res, next) => {
   try {
     const data = await Account.getAll()
@@ -19,7 +25,7 @@ router.get('/:id', async (req, res, next) => {
   }
 })
 
-router.post('/', async (req, res, next) => {
+router.post('/', checkAccountPayload, async (req, res, next) => {
   try {
     const data = await Account.create(req.body)
     res.json(data)
