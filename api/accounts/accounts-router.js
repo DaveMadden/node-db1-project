@@ -16,7 +16,7 @@ router.get('/', async (req, res, next) => {
   }
 })
 
-router.get('/:id', async (req, res, next) => {
+router.get('/:id',checkAccountId, async (req, res, next) => {
   try {
     const data = await Account.getById(req.params.id)
     res.json(data)
@@ -25,16 +25,16 @@ router.get('/:id', async (req, res, next) => {
   }
 })
 
-router.post('/', checkAccountPayload, async (req, res, next) => {
+router.post('/', checkAccountPayload, checkAccountNameUnique, async (req, res, next) => {
   try {
     const data = await Account.create(req.body)
-    res.json(data)
+    res.status(201).json(data)
   } catch (err) {
     next(err)
   }
 })
 
-router.put('/:id', async (req, res, next) => {
+router.put('/:id', checkAccountId, checkAccountPayload, checkAccountNameUnique, async (req, res, next) => {
   try {
     const data = await Account.updateById(req.params.id, req.body)
     res.json(data)
@@ -43,7 +43,7 @@ router.put('/:id', async (req, res, next) => {
   }
 });
 
-router.delete('/:id', async (req, res, next) => {
+router.delete('/:id', checkAccountId, async (req, res, next) => {
   try {
     const data = await Account.deleteById(req.params.id)
     res.json(data)

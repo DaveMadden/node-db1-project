@@ -9,7 +9,15 @@ const getAll = async () => {
 const getById = async id => {
   // DO YOUR MAGIC
   const record = await db('accounts')
+    .select("budget", "name")
     .where("id", id)
+    .first()
+  return record
+}
+
+const getByName = async nom => {
+  const record = await db('accounts')
+    .where("name", nom)
   return record
 }
 
@@ -40,4 +48,5 @@ module.exports = {
   create,
   updateById,
   deleteById,
+  getByName
 }
